@@ -17,24 +17,32 @@ class Program
 
             string response = Console.ReadLine();
 
-            if (response == "1") {
+            if (response == "1" || response == "job") {
 
-                Job job1 = new Job();
-                job1._title = "Software Developer";
-                job1._startDate = "Jan 02 2003";
-                job1._endDate = "Feb 01 2008";
+                Job currentJob = new Job();
+                Console.WriteLine("Insert Job Title: ");
+                currentJob._title = Console.ReadLine();
+                Console.WriteLine("Insert Start date: ");
+                currentJob._startDate = Console.ReadLine();
+                Console.WriteLine("Insert End date: ");
+                currentJob._endDate = Console.ReadLine();
 
-                myResume._experience.Add(job1);
+                myResume._experience.Add(currentJob);
             } 
             else if (response == "2")
             {
-                Console.WriteLine(myResume);
+                myResume.DisplayFullResume();
             }
             else if (response == "3")
             {
-                Education ed1 = new Education();
-                ed1._school = "Instituto Politecnico";
-                myResume._education.Add(ed1);
+                Education currentEdu = new Education();
+                
+                Console.WriteLine("Type the name of your school: ");
+                currentEdu._school = Console.ReadLine();
+                Console.WriteLine("Type the title/certificate name: ");
+                currentEdu._titleEarned = Console.ReadLine();
+
+                myResume._education.Add(currentEdu);
             }
             else if (response == "4")
             {
@@ -42,7 +50,7 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid input. Try again!");
+                Console.WriteLine("Invalid input. Try a number from 1 to 4!");
             }
         }
     }
