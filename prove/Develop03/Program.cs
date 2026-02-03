@@ -23,7 +23,7 @@ class Program
             Console.WriteLine("4. Load Complete Journal");
 
             // Adding a way to load the journal and filter part of it to show only entries on especific date
-            Console.WriteLine("5. Find Page on saved Journal");
+            Console.WriteLine("5. Find on Journal");
             Console.WriteLine("6. Quit");
 
             string response = Console.ReadLine();

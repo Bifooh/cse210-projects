@@ -7,8 +7,8 @@ public class Journal
 
     public void ShowJournalPage ()
     {
-        Console.WriteLine("Current Pages");
-        Console.WriteLine($"Entries: {_pages.Count}");
+        Console.WriteLine("---------------------");
+        Console.WriteLine($"Current temporal entries registered: {_pages.Count}");
         Console.WriteLine("");
 
         foreach(JournalEntry je in _pages)
@@ -22,13 +22,16 @@ public class Journal
 
     public void SaveJournal(){
 
-        using (StreamWriter outputFile = new StreamWriter(filename)){
+        using (StreamWriter outputFile = new StreamWriter(filename, true)){
 
         foreach (JournalEntry jEntry in _pages)
             {
-                outputFile.WriteLine($"{jEntry._dateText},{jEntry._currentQuestion},{jEntry._usersInput}");
+                outputFile.WriteLine($"{jEntry._dateText}|{jEntry._currentQuestion}|{jEntry._usersInput}");
             }
+
         Console.WriteLine("Journal Pages sucessfully saved!");
+        Console.WriteLine("");
+        _pages.Clear();
     }
     }
 
@@ -38,13 +41,13 @@ public class Journal
 
         foreach (string line in lines)
         {
-            string[] parts = line.Split(",");
+            string[] parts = line.Split("|");
 
             string date = parts[0];
             string question = parts[1];
             string answer = parts[2];
 
-            Console.WriteLine($"on {date}.");
+            Console.WriteLine($"{date}");
             Console.WriteLine($"Q: {question}");
             Console.WriteLine($"A: {answer}");
             Console.WriteLine("");
@@ -55,10 +58,11 @@ public class Journal
     {
         string[] lines = File.ReadAllLines(filename);
         int matches = 0;
+        string fDate = "";
 
         foreach (string line in lines)
         {
-            string[] parts = line.Split(",");
+            string[] parts = line.Split("|");
 
             string date = parts[0];
             string question = parts[1];
@@ -66,12 +70,12 @@ public class Journal
 
             if (date == filteringDate) {
                 
-                Console.WriteLine($"{date}.");
                 Console.WriteLine($"Q: {question}");
                 Console.WriteLine($"A: {answer}");
-                Console.WriteLine("");
+                Console.WriteLine("---");
 
                 matches += 1;
+                fDate = date;
             }
         }
 
@@ -87,5 +91,8 @@ public class Journal
         {
             Console.WriteLine($"No matches found.");
         }
+
+        Console.WriteLine($"For entries on {fDate}");
+        Console.WriteLine("");
     }
 }
