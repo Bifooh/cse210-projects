@@ -1,74 +1,55 @@
 using System;
-/* 
+using System.Data;
 
-- Added aditional options on the menu to be able to filter entries by date, so that the user can see entries only from an especific day 
-- Added entries counter when option 2 is used (Show current journal page shows current entries)
+// I created a Book.cs with multiple Scripture (with reference and verse(s)).
+// Users will have a different domain Scripture everytime they start the program.
 
-*/
-
+// ONE BIG PROBLEM though is that the Console.Clear(); method doesn't work at all in my end, so I did a Try/Catch to just print lines for when I get the IOException error.
 
 class Program
 {
+    public static Book _b;
 
     static void Main(string[] args)
     {
-        Journal usersJournal = new Journal();
+        _b = new Book();
+        Scripture _pickedScripture = _b.GetScripture();
         
+
+        Console.WriteLine("Hello Develop04 World!");
+
         while (true)
         {
-            Console.WriteLine("Choose what to do next: ");
-            Console.WriteLine("1. Write something new");
-            Console.WriteLine("2. Show current journal page");
-            Console.WriteLine("3. Save page on Jounal");
-            Console.WriteLine("4. Load Complete Journal");
+            _pickedScripture.PrintScripture();
+            Console.WriteLine();
+            Console.WriteLine("Press enter to continue or type 'quit' to finish:");
+            Console.WriteLine();
+            string input = Console.ReadLine();
 
-            // Adding a way to load the journal and filter part of it to show only entries on especific date
-            Console.WriteLine("5. Find on Journal");
-            Console.WriteLine("6. Quit");
-
-            string response = Console.ReadLine();
-
-            // Create Journal Entry
-            if (response == "1") {
-
-                JournalEntry je = new JournalEntry();
-                je.CreateJournalEntry();
-
-                usersJournal._pages.Add(je);
+            if (_pickedScripture.CheckScriptureIsHidden() == false)
+            {
+                if (input == "")
+                {
+                    _pickedScripture.HideWordsRandomly();
+                }
+                else if (input == "quit" || input == "q")
+                {
+                    break;
+                }
                 
-            } 
-            // Display the current Journal pages (list of entries)
-            else if (response == "2")
-            {
-                usersJournal.ShowJournalPage();
             }
-            // Saving all existing pages to the Journal file
-            else if (response == "3")
-            {
-                usersJournal.SaveJournal();
-            }
-            // Display all entries saved in the Journal (txt file)
-            else if (response == "4")
-            {
-                usersJournal.DisplayJournal();
-            }
-            // Filtering Journal entries
-            else if (response == "5")
-            {
-                Console.WriteLine("Write a date to filter. Use the format: month/day/year");
-                Console.WriteLine("Example: 1/31/2026");
-                Console.WriteLine("Avoid using '01' Intead of '1'");
-                string dateToFilter = Console.ReadLine();
-                usersJournal.DisplayByDate(dateToFilter);
-            }
-            // Quiting the code
-            else if (response == "6")
+            else if (_pickedScripture.CheckScriptureIsHidden() == true)
             {
                 break;
             }
-            else
-            {
-                Console.WriteLine("Invalid input. Try a number from 1 to 6!");
+
+            try 
+            { 
+                Console.Clear(); 
+            } 
+            catch (IOException) 
+            { 
+                Console.WriteLine("\n\n\n"); 
             }
         }
     }
