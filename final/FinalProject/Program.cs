@@ -1,7 +1,5 @@
 using System;
-using System.ComponentModel;
-using System.Data.SqlTypes;
-using System.Reflection.Metadata.Ecma335;
+using System.Collections.Generic;
 
 class Program
 {
@@ -9,16 +7,15 @@ class Program
     {
         List<User> _users = new List<User>();
         WorkOutArchive wa = new WorkOutArchive();
-        User u = new User();
         int _menuInput;
 
         while (true)
         {
-            Console.WriteLine("Menu of options:");
+            Console.WriteLine("\nMenu of options:");
             Console.WriteLine("1. Create new User");
             Console.WriteLine("2. Load User");
             Console.WriteLine("3. Add Workout Session");
-            Console.WriteLine("4. Load Workout History");
+            Console.WriteLine("4. Show Workout History");
             Console.WriteLine("5. Quit");
             _menuInput = int.Parse(Console.ReadLine());
 
@@ -35,6 +32,7 @@ class Program
                 float lbs = float.Parse(Console.ReadLine());
                 Console.WriteLine("What is you height in cms? (e.g. '180')");
                 float height = float.Parse(Console.ReadLine());
+
                 // Getting gender
                 Console.WriteLine("What is you gender? (use 'm' for male or 'f' for female)");
                 string gStrg = Console.ReadLine();
@@ -43,41 +41,89 @@ class Program
                 {
                     gender = true;
                 }
+
                 // Deciding if the User's Fitness Goal will be WeightLoss or MuscleGain
                 Console.WriteLine("What would your perfect body weight be? ");
                 float perfectWeight = float.Parse(Console.ReadLine());
                 Goal g = GetFitnessGoal(perfectWeight, lbs);
                 User newUser = new User(id, userName, age, lbs, height, gender, g, wa);
+
                 // Add user to the list of users
                 _users.Add(newUser);
-
+                Console.WriteLine("User created successfully!");
             }
             else if (_menuInput == 2)
             {
-                // Load information about a user from the file with user or list of users
-                // and then show information or a message saying "information about Samuel loaded"
+                Console.WriteLine("Enter your User ID:");
+                int searchId = int.Parse(Console.ReadLine());
+                User loadedUser = AccessUser(_users, searchId);
+
+                if (loadedUser != null)
+                {
+                    Console.WriteLine($"Information about {loadedUser.GetName()} loaded successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("User not found. Please try a different ID or create a new user.");
+                }
             }
             else if (_menuInput == 3)
             {
-                // Adding an exercise acomplished to a WorkOut Session either Cardio or Strengh to the Workout history
+                Console.WriteLine("Which exercise did you complete? (1) Cardio or (2) Strength");
+                int exType = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter the name of the exercise (e.g., Running, Bench Press):");
+                string exName = Console.ReadLine();
+
+                Console.WriteLine("Enter estimated calories burnt:");
+                float calories = float.Parse(Console.ReadLine());
+
+                if (exType == 1)
+                {
+                    Console.WriteLine("Enter duration in minutes:");
+                    int time = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Enter intensity (1-10):");
+                    int intensity = int.Parse(Console.ReadLine());
+
+                    Cardio cardio = new Cardio(time, intensity, exName, calories);
+                    wa.AddExercise(cardio);
+                    Console.WriteLine("Cardio workout added and saved!");
+                }
+                else if (exType == 2)
+                {
+                    Console.WriteLine("Enter number of reps:");
+                    int reps = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Enter weight used (lbs):");
+                    int weight = int.Parse(Console.ReadLine());
+
+                    // Note: Continuing to use your spelling 'Strength' to match your class name
+                    Strength Strength = new Strength(reps, weight, exName, calories);
+                    wa.AddExercise(Strength);
+                    Console.WriteLine("Strength workout added and saved!");
+                }
             }
             else if (_menuInput == 4)
             {
-                // Loading  the Workout History and showing previous Workout Sessions.
+                wa.DisplayHistory();
             }
             else if (_menuInput == 5)
             {
+                Console.WriteLine("Goodbye!");
                 break;
             }
         }
-
-
-
     }
 
-    public void AccessUser()
+    static public User AccessUser(List<User> users, int id)
     {
-        // Retrieve information from a specific user in the _users List
+        foreach (User u in users)
+        {
+            if (u.GetId() == id)
+            {
+                return u;
+            }
+        }
+        return null; // Return null if user isn't found
     }
 
     static public Goal GetFitnessGoal(float pw, float w)

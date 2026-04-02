@@ -49,4 +49,14 @@ public class User
         _goal = g;
     }
 
+    public int GetId()
+    {
+        return _id;
+    }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
 }

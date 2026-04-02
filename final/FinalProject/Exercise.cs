@@ -11,4 +11,14 @@ public abstract class Exercise
     public abstract float GetCaloriesBurnt();
     public void SetName(string n) { _name = n; }
     public void SetCaloriesBurnt(float c) { _caloriesBurnt = c; }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
+    // public float GetCaloriesBurnt()
+    // {
+    //     return _caloriesBurnt;
+    // }
 }

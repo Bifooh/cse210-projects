@@ -12,7 +12,13 @@ public class Cardio : Exercise
     }
     public override float GetCaloriesBurnt()
     {
-        // calculate calories burnt base on Attributes of the specific type of exercise
-        return 0;
+        // Rough estimate: Time (minutes) * Intensity * 1.5 (average baseline multiplier)
+        // Example: 30 mins at intensity 5 = 30 * 5 * 1.5 = 225 calories
+        float calculatedCalories = _time * _intensity * 1.5f;
+
+        // Save it to the base class attribute so it can be retrieved later
+        base.SetCaloriesBurnt(calculatedCalories);
+
+        return calculatedCalories;
     }
 }
